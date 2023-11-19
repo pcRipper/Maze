@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Maze.Logic
 {
+    [Serializable]
     public class Cell
     {
         public bool canGoLeft;
@@ -35,6 +36,7 @@ namespace Maze.Logic
         }
     }
 
+    [Serializable]
     public class MazeGenerator
     {
         private static Pair<int, int>[] directions = {
@@ -60,6 +62,14 @@ namespace Maze.Logic
                 if (row < 0 || maze.GetLength(0) <= row) return null;
                 if (column < 0 || maze.GetLength(1) <= column) return null;
                 return maze[row, column];
+            }
+        }
+
+        public Cell this[Pair<int, int> index] 
+        {
+            get
+            {
+                return this[index.first, index.second];
             }
         }
         public Pair<int,int> Size { get { return new(maze.GetLength(0),maze.GetLength(1)); } }

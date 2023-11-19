@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace Maze.Logic
 {
@@ -40,6 +42,14 @@ namespace Maze.Logic
                 && 
                 (l.first.second >= r.second.second && r.first.second >= l.second.second)
             ;
+        }
+
+        public static Pair<int,int> getCenter(Pair<Pair<int,int>, Pair<int, int>> rectangle)
+        {
+            return new(
+                (rectangle.second.first - rectangle.first.first)/2 + rectangle.first.first, 
+                (rectangle.second.second - rectangle.first.second)/2 + rectangle.first.second 
+            );
         }
 
         public static void CopyBitmap(

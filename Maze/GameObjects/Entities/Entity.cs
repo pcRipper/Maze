@@ -1,6 +1,9 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,28 +38,31 @@ namespace Maze.GameObjects.Entities
             this.blockPos = new(blockPos);
         }
         /// <summary>
-        /// method for drawing an object
+        /// 
         /// </summary>
-        /// <param name="visibleField">two dots, where:
-        /// first -> top right corner of visible field
-        /// second -> bottom left corner of visible field    
-        /// </param>
-        /// <param name="pictureBox"> instance of pictureBox for drawing </param>
-        /// <returns>0 - on succeess or error code</returns>
-        public abstract int drawObject(Pair<Pair<int, int>,Pair<int, int>> visibleField, ref PictureBox pictureBox,int blockSize);
+        /// <param name="picture">picture to draw an image in</param>
+        /// <param name="blockSize">size(in pixels) of a square block</param>
+        /// <param name="render_start">region, that currently captured and will be represented on screen</param>
+        /// <returns>status code</returns>
+        public abstract int drawObject(ref Bitmap picture,int blockSize, Rectangle render_zone);
         /// <summary>
         /// 
         /// </summary>
         /// <param name="pos">move To next</param>
         /// <returns></returns>
-        public abstract int moveTo(ref MazeGenerator maze, Pair<int, int> pos);
-        /// <summary>
-        /// check if the current object is in the zone,by block_pos
-        /// </summary>
-        /// <param name="zone">zone, where: 
-        /// zone.first  -> top right corner, 
-        /// zone.second -> bottom left corner
-        /// </param>
-        /// <returns>if current object is in the zone</returns>
+        public abstract int move(ref MazeGenerator maze, Pair<int, int> vector, int blockSize,int offsets);
+        
+        protected bool isVisible(Rectangle renderZone)
+        {
+            Pair<Pair<int, int>, Pair<int, int>> rect = new(
+                new(renderZone.Y,renderZone.X),
+                new(renderZone.Y + renderZone.Height,renderZone.X + renderZone.Width)
+            );
+            return 
+                Functions.doesBelongToRec(rect,coordinates.first)
+                ||
+                Functions.doesBelongToRec(rect,coordinates.second)
+            ;
+        }
     }
 }

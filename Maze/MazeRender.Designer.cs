@@ -37,7 +37,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(430, 422);
+            button1.Location = new Point(12, 368);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 0;
@@ -49,13 +49,13 @@
             // 
             pictureBox1.Location = new Point(12, 12);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(371, 371);
+            pictureBox1.Size = new Size(350, 350);
             pictureBox1.TabIndex = 1;
             pictureBox1.TabStop = false;
             // 
             // button2
             // 
-            button2.Location = new Point(12, 422);
+            button2.Location = new Point(93, 368);
             button2.Name = "button2";
             button2.Size = new Size(75, 23);
             button2.TabIndex = 2;
@@ -65,23 +65,23 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(389, 12);
+            textBox1.Location = new Point(368, 12);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(129, 371);
+            textBox1.Size = new Size(150, 350);
             textBox1.TabIndex = 3;
             // 
             // MazeRender
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(530, 457);
+            ClientSize = new Size(530, 395);
             Controls.Add(textBox1);
             Controls.Add(button2);
             Controls.Add(pictureBox1);
             Controls.Add(button1);
             FormBorderStyle = FormBorderStyle.None;
-            MinimumSize = new Size(530, 457);
+            MaximumSize = new Size(530, 457);
             Name = "MazeRender";
             Text = "MazeRender";
             Load += MazeRender_Load;

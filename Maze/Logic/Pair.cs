@@ -47,5 +47,10 @@ namespace Maze.Logic
             Pair<First,Second> asPair = obj as Pair<First,Second>;
             return asPair.first.Equals(this.first) && asPair.second.Equals(this.second);
         }
+
+        public override string ToString()
+        {
+            return $"({first.ToString()},{second.ToString()})";
+        }
     }
 }
