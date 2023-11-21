@@ -195,9 +195,10 @@ namespace Maze
                 );
             }
 
-            if (Functions.Collided(entities["main"].coordinates, entities["exit"].coordinates))
+            if (Functions.Collided(entities["main"].coordinates, entities["exit"].coordinates) && !ReachedEixt)
             {
-
+                ReachedEixt = true;
+                MessageBox.Show("You won!");
             }
 
             pictureBox1.Image = gamePicture;
@@ -228,33 +229,35 @@ namespace Maze
             }
 
             if (result_code != 0) return;
-            if (!ReachedEixt)
-            {
-
-            }
 
             Render();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            using (var dialog = new OpenFileDialog())
+            try
             {
-                if (dialog.ShowDialog() != DialogResult.OK) return;
-
-                XmlSerializer xml = new XmlSerializer(typeof(MazeGenerator));
-                using (var fs = new FileStream(dialog.FileName, FileMode.OpenOrCreate))
+                using (var dialog = new OpenFileDialog())
                 {
-                    try
-                    {
-                        xml.Serialize(fs, maze);
+                    if (dialog.ShowDialog() != DialogResult.OK) return;
 
-                    }
-                    catch (Exception ex)
+                    XmlSerializer xml = new XmlSerializer(typeof(MazeGenerator));
+                    using (var fs = new FileStream(dialog.FileName, FileMode.OpenOrCreate))
                     {
-                        MessageBox.Show(ex.Message);
+                        try
+                        {
+                            xml.Serialize(fs, maze);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
                     }
                 }
+            }catch(Exception ex)
+            {
+                MessageBox.Show($"Error occured: {ex.Message}");
             }
         }
     }

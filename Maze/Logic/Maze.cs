@@ -290,14 +290,47 @@ namespace Maze.Logic
 
         public void ReadXml(XmlReader reader)
         {
-            throw new NotImplementedException();
+            reader.ReadStartElement(); // Move to the first element
+
+            var serializerCell = new XmlSerializer(typeof(Cell));
+            var serializerPair = new XmlSerializer(typeof(Pair<int, int>));
+
+            reader.ReadStartElement("entryPoint");
+            entryPoint = (Pair<int, int>)serializerPair.Deserialize(reader);
+            reader.ReadEndElement(); // entryPoint
+
+            reader.ReadStartElement("endPoint");
+            endPoint = (Pair<int, int>)serializerPair.Deserialize(reader);
+            reader.ReadEndElement(); // endPoint
+
+            if (reader.IsStartElement("mazeData"))
+            {
+                int rows = int.Parse(reader.GetAttribute("rows"));
+                int columns = int.Parse(reader.GetAttribute("columns"));
+                maze = new Cell[rows, columns];
+
+                reader.ReadStartElement(); // Move to the first "cellPosition"
+
+                while (reader.IsStartElement("cellPosition"))
+                {
+                    int row = int.Parse(reader.GetAttribute("r"));
+                    int col = int.Parse(reader.GetAttribute("c"));
+
+                    reader.ReadStartElement(); // Move to the "Cell" element
+                    maze[col, row] = (Cell)serializerCell.Deserialize(reader);
+                    reader.ReadEndElement(); // Move out of the "cellPosition" element
+                }
+
+                reader.ReadEndElement(); // Move out of the "mazeData" element
+            }
+
+            reader.ReadEndElement(); // Move out of the main element
         }
 
         public void WriteXml(XmlWriter writer)
         {
             var serializerCell = new XmlSerializer(typeof(Cell));
             var serializerPair = new XmlSerializer(typeof(Pair<int,int>));
-            writer.WriteStartElement("maze");
             
             writer.WriteStartElement("entryPoint");
             serializerPair.Serialize(writer, entryPoint);
@@ -325,8 +358,6 @@ namespace Maze.Logic
                 }
                 writer.WriteEndElement(); // mazeData
             }
-
-            writer.WriteEndElement(); // maze
 
         }
     }
