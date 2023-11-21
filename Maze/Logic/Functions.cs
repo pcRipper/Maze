@@ -118,5 +118,17 @@ namespace Maze.Logic
                 source.UnlockBits(sourceData);
             }
         }
+
+        public static int[] getLimitedCircle(int radius)
+        {
+            int[] result = new int[radius];
+
+            for(int i = 0;i < radius; ++i)
+            {
+
+            }
+
+            return result;
+        }
     }
 }

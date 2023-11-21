@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace Maze
 {
@@ -40,24 +41,28 @@ namespace Maze
 
         private void button1_Click(object sender, EventArgs e)
         {
-            createMaze(5, 5);
+            try
+            {
+                int rows = Convert.ToInt32(numericUpDown1.Value);
+                int columns = Convert.ToInt32(numericUpDown2.Value);
+
+                if (rows < 2 || rows > 100) throw new Exception("Rows amount value should be in range[2,100]");
+                if (columns < 2 || columns > 100) throw new Exception("Columns amount value should be in range[2,100]");
+
+                MazeGenerator maze = new MazeGenerator();
+                maze.generateMaze(rows, columns);
+                startGame(maze);
+
+            }catch(Exception ex)
+            {
+                MessageBox.Show($"Error occured: {ex.Message}");
+            }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void startGame(MazeGenerator maze)
         {
-            createMaze(10, 10);
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            createMaze(15, 15);
-        }
-
-        private void createMaze(int rows, int columns)
-        {
-            MazeGenerator generator = new MazeGenerator();
-            generator.generateMaze(rows, columns);
-            MazeRender render = new MazeRender(ref generator);
+            if (maze == null) return;
+            MazeRender render = new MazeRender(ref maze);
             render.MdiParent = this.getTopMDIParent();
 
             this.Hide();
@@ -72,11 +77,29 @@ namespace Maze
             render.Show();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
+            //Load maze from XML
+            try
+            {
+                using (var dialog = new OpenFileDialog())
+                {
+                    if (dialog.ShowDialog() != DialogResult.OK) throw new Exception("failed to get a file");
+                    
+                    XmlSerializer xml = new XmlSerializer(typeof(MazeGenerator));
+                    FileStream fs = new FileStream(dialog.FileName,FileMode.Open, FileAccess.Read);
 
+                    var result = xml.Deserialize(fs);
+                    if (result == null) throw new Exception("failed to deserialize the object");
+                    MazeGenerator maze = (MazeGenerator)result;
+                    if (maze == null) throw new Exception("failed to deserialize the object");
+                    startGame(maze);
+                }
+            } catch(Exception ex)
+            {
+                MessageBox.Show($"Error occured: {ex.Message}");
+            }
         }
-
         public void customizeParent(Form mdiParent)
         {
             if (mdiParent == null) return;

@@ -31,11 +31,15 @@
             button1 = new Button();
             button_exit = new Button();
             button4 = new Button();
+            numericUpDown1 = new NumericUpDown();
+            numericUpDown2 = new NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
             SuspendLayout();
             // 
             // button1
             // 
-            button1.Location = new Point(65, 36);
+            button1.Location = new Point(68, 28);
             button1.Name = "button1";
             button1.Size = new Size(100, 35);
             button1.TabIndex = 0;
@@ -45,7 +49,7 @@
             // 
             // button_exit
             // 
-            button_exit.Location = new Point(65, 118);
+            button_exit.Location = new Point(68, 139);
             button_exit.Name = "button_exit";
             button_exit.Size = new Size(100, 35);
             button_exit.TabIndex = 3;
@@ -55,19 +59,36 @@
             // 
             // button4
             // 
-            button4.Location = new Point(65, 77);
+            button4.Location = new Point(68, 98);
             button4.Name = "button4";
             button4.Size = new Size(100, 35);
             button4.TabIndex = 4;
             button4.Text = "Load";
             button4.UseVisualStyleBackColor = true;
-            button4.Click += button4_Click;
+            button4.Click += button2_Click;
+            // 
+            // numericUpDown1
+            // 
+            numericUpDown1.Location = new Point(68, 69);
+            numericUpDown1.Name = "numericUpDown1";
+            numericUpDown1.RightToLeft = RightToLeft.Yes;
+            numericUpDown1.Size = new Size(46, 23);
+            numericUpDown1.TabIndex = 5;
+            // 
+            // numericUpDown2
+            // 
+            numericUpDown2.Location = new Point(122, 69);
+            numericUpDown2.Name = "numericUpDown2";
+            numericUpDown2.Size = new Size(46, 23);
+            numericUpDown2.TabIndex = 6;
             // 
             // Menu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(241, 209);
+            Controls.Add(numericUpDown2);
+            Controls.Add(numericUpDown1);
             Controls.Add(button4);
             Controls.Add(button_exit);
             Controls.Add(button1);
@@ -79,6 +100,8 @@
             Text = "Menu";
             FormClosing += Menu_FormClosing;
             Load += Menu_Load;
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
             ResumeLayout(false);
         }
 
@@ -87,5 +110,7 @@
         private Button button1;
         private Button button_exit;
         private Button button4;
+        private NumericUpDown numericUpDown1;
+        private NumericUpDown numericUpDown2;
     }
 }

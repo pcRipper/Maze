@@ -164,7 +164,6 @@ namespace Maze
 
         private void RenderGamePicture(ref Bitmap gamePicture, Rectangle visibleRectangle)
         {
-
             using (Graphics g = Graphics.FromImage(gamePicture))
             {
                 g.DrawImage(renderedMaze, new Rectangle(new(0, 0), pictureBox1.Size), visibleRectangle, GraphicsUnit.Pixel);
