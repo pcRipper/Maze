@@ -38,9 +38,9 @@ namespace Maze.Logic
         public static bool Collided(Pair<Pair<int, int>, Pair<int, int>> l, Pair<Pair<int, int>, Pair<int, int>> r)
         {
             return 
-                (l.first.first >= r.second.first && r.first.first >= l.second.first)
-                && 
-                (l.first.second >= r.second.second && r.first.second >= l.second.second)
+                Math.Min(l.second.second,r.second.second) >= Math.Max(l.first.second,r.first.second)
+                &&
+                Math.Min(l.second.first,r.second.first) >= Math.Max(l.first.first,r.first.first)
             ;
         }
 

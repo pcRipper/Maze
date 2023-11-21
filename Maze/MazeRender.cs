@@ -11,12 +11,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Serialization;
 using Maze.GameObjects.Entities;
 using Maze.Logic;
+using Maze.MDI;
 
 namespace Maze
 {
-    public partial class MazeRender : Form
+    public partial class MazeRender : Form, iMdiChild
     {
         static private int BLOCK_SIZE = 75;
         static private int OFFSETS = 500;
@@ -46,6 +48,16 @@ namespace Maze
             VISIBLE_WIDTH = pictureBox1.Width;
         }
 
+        public void customizeParent(Form mdiParent)
+        {
+            if (mdiParent == null) return;
+            mdiParent.MaximumSize =
+            mdiParent.MinimumSize =
+            mdiParent.Size = new(this.Width + 20, this.Height + 43);
+            mdiParent.Text = this.Text;
+            this.StartPosition = FormStartPosition.CenterScreen;
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -59,7 +71,8 @@ namespace Maze
                     new(BLOCK_SIZE * maze.Finish.first + OFFSETS, BLOCK_SIZE * maze.Finish.second + OFFSETS),
                     new(BLOCK_SIZE * (maze.Finish.first + 1) + OFFSETS, BLOCK_SIZE * (maze.Finish.second + 1) + OFFSETS)
                 ),
-                new(maze.Finish)
+                new(maze.Finish),
+                BLOCK_SIZE / 4
             );
             int character_radius = BLOCK_SIZE / 4;
             entities["main"] = new Character(
@@ -68,10 +81,13 @@ namespace Maze
                     new(BLOCK_SIZE * maze.Start.first + BLOCK_SIZE / 2 + character_radius + OFFSETS, BLOCK_SIZE * maze.Start.second + BLOCK_SIZE / 2 + character_radius + OFFSETS)
                 ),
                 new(maze.Start),
-                BLOCK_SIZE / 4,
+                character_radius,
                 15
             );
-
+            //render the image
+            Render();
+            //set form to sizes
+            customizeParent(this.getTopMDIParent());
         }
 
         private void RenderMaze(ref Bitmap bitmap)
@@ -146,9 +162,8 @@ namespace Maze
             }
         }
 
-        private void RenderGamePicture(ref Bitmap gamePicture,Rectangle visibleRectangle)
+        private void RenderGamePicture(ref Bitmap gamePicture, Rectangle visibleRectangle)
         {
-            textBox1.AppendText($"Capturing: ({visibleRectangle.Y},{visibleRectangle.X})->({visibleRectangle.Y + visibleRectangle.Height},{visibleRectangle.X + visibleRectangle.Width})");
 
             using (Graphics g = Graphics.FromImage(gamePicture))
             {
@@ -157,7 +172,7 @@ namespace Maze
             pictureBox1.Image = gamePicture;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Render()
         {
             //set fragment of map
             Pair<int, int> center = Functions.getCenter(entities["main"].coordinates);
@@ -169,7 +184,7 @@ namespace Maze
             );
 
             Bitmap gamePicture = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            RenderGamePicture(ref gamePicture,visibleRectangle);
+            RenderGamePicture(ref gamePicture, visibleRectangle);
 
             //set entitites
             foreach (var obj in entities)
@@ -179,6 +194,11 @@ namespace Maze
                     MazeRender.BLOCK_SIZE,
                     visibleRectangle
                 );
+            }
+
+            if (Functions.Collided(entities["main"].coordinates, entities["exit"].coordinates))
+            {
+
             }
 
             pictureBox1.Image = gamePicture;
@@ -192,7 +212,7 @@ namespace Maze
             switch (e.KeyChar)
             {
                 case 'w':
-                    result_code = entities["main"].move(ref maze, new(-1, 0), BLOCK_SIZE,OFFSETS);
+                    result_code = entities["main"].move(ref maze, new(-1, 0), BLOCK_SIZE, OFFSETS);
                     break;
                 case 'a':
                     result_code = entities["main"].move(ref maze, new(0, -1), BLOCK_SIZE, OFFSETS);
@@ -214,9 +234,29 @@ namespace Maze
 
             }
 
-            
+            Render();
+        }
 
-            button2_Click(null, null);
+        private void button3_Click(object sender, EventArgs e)
+        {
+            using (var dialog = new OpenFileDialog())
+            {
+                if (dialog.ShowDialog() != DialogResult.OK) return;
+
+                XmlSerializer xml = new XmlSerializer(typeof(MazeGenerator));
+                using (var fs = new FileStream(dialog.FileName, FileMode.OpenOrCreate))
+                {
+                    try
+                    {
+                        xml.Serialize(fs, maze);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+            }
         }
     }
 }

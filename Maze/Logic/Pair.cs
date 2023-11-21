@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Maze.Logic
 {
+    [Serializable]
     public class Pair<First, Second>
         where First : notnull
         where Second : notnull
     {
         public First first;
         public Second second;
+
+        public Pair()
+        {
+
+        }
 
         public Pair(First first = default(First), Second second = default(Second))
         {

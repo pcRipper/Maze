@@ -1,4 +1,5 @@
 ﻿using Maze.Logic;
+using Maze.MDI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,7 +12,7 @@ using System.Windows.Forms;
 
 namespace Maze
 {
-    public partial class Menu : Form
+    public partial class Menu : Form, iMdiChild
     {
         string previous_parent_text = String.Empty;
         public Menu()
@@ -26,11 +27,7 @@ namespace Maze
 
         private void Menu_Load(object sender, EventArgs e)
         {
-            if (this.MdiParent != null)
-            {
-                previous_parent_text = this.MdiParent.Text;
-                this.MdiParent.Text = "Menu";
-            }
+            this.customizeParent(this.getTopMDIParent());
         }
 
         private void Menu_FormClosing(object sender, FormClosingEventArgs e)
@@ -67,14 +64,27 @@ namespace Maze
 
             render.FormClosed += (sender, e) =>
             {
-                this.StartPosition = FormStartPosition.CenterScreen;
+                this.customizeParent(this.getTopMDIParent());
                 this.Show();
             };
 
-            render.StartPosition = FormStartPosition.CenterScreen;
+            render.customizeParent(this.getTopMDIParent());
             render.Show();
         }
 
+        private void button4_Click(object sender, EventArgs e)
+        {
 
+        }
+
+        public void customizeParent(Form mdiParent)
+        {
+            if (mdiParent == null) return;
+            mdiParent.MaximumSize =
+            mdiParent.MinimumSize =
+            mdiParent.Size = new(this.Width + 20, this.Height + 43);
+            mdiParent.Text = this.Text;
+            this.StartPosition = FormStartPosition.CenterScreen;
+        }
     }
 }

@@ -2,42 +2,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.DirectoryServices;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Numerics;
+using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace Maze.Logic
 {
     [Serializable]
-    public class Cell
-    {
-        public bool canGoLeft;
-        public bool canGoRight;
-        public bool canGoTop;
-        public bool canGoBottom;
-        public bool visited;
-
-        public Cell()
-        {
-            canGoLeft = false;
-            canGoRight = false;
-            canGoTop = false;
-            canGoBottom = false;
-            visited = false;
-        }
-
-        public override string ToString()
-        {
-            return $"{canGoTop}|{canGoRight}|{canGoBottom}|{canGoLeft}";
-        }
-    }
-
-    [Serializable]
-    public class MazeGenerator
+    public class MazeGenerator : IXmlSerializable
     {
         private static Pair<int, int>[] directions = {
             new Pair<int, int>(0,-1),
@@ -50,7 +31,7 @@ namespace Maze.Logic
         private List<Pair<int, int>>[] leveled;
         private Pair<int, int> entryPoint;
         private Pair<int, int> endPoint;
-        private  Cell[,]? maze;
+        private Cell[,]? maze;
 
         public Pair<int, int> Start  { get { return entryPoint; } }
         public Pair<int, int> Finish { get { return endPoint; } }
@@ -300,6 +281,53 @@ namespace Maze.Logic
                 result[pair.Value].Add(pair.Key);
             }
             return result;
+        }
+
+        public XmlSchema? GetSchema()
+        {
+            return null;
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            var serializerCell = new XmlSerializer(typeof(Cell));
+            var serializerPair = new XmlSerializer(typeof(Pair<int,int>));
+            writer.WriteStartElement("maze");
+            
+            writer.WriteStartElement("entryPoint");
+            serializerPair.Serialize(writer, entryPoint);
+            writer.WriteEndElement(); // entryPoint
+
+            writer.WriteStartElement("endPoint");
+            serializerPair.Serialize(writer, endPoint);
+            writer.WriteEndElement(); // endPoint
+
+            if (maze != null)
+            {
+                writer.WriteStartElement("mazeData");
+                writer.WriteAttributeString("rows", maze.GetLength(0).ToString());
+                writer.WriteAttributeString("columns", maze.GetLength(1).ToString());
+                for (int i = 0; i < maze.GetLength(0); i++)
+                {
+                    for (int j = 0; j < maze.GetLength(1); j++)
+                    {
+                        writer.WriteStartElement("cellPosition");
+                        writer.WriteAttributeString("r", j.ToString());
+                        writer.WriteAttributeString("c", i.ToString());
+                        serializerCell.Serialize(writer, maze[i, j]);
+                        writer.WriteEndElement();
+                    }
+                }
+                writer.WriteEndElement(); // mazeData
+            }
+
+            writer.WriteEndElement(); // maze
+
         }
     }
 }

@@ -54,15 +54,13 @@ namespace Maze.GameObjects.Entities
         
         protected bool isVisible(Rectangle renderZone)
         {
-            Pair<Pair<int, int>, Pair<int, int>> rect = new(
-                new(renderZone.Y,renderZone.X),
-                new(renderZone.Y + renderZone.Height,renderZone.X + renderZone.Width)
+            return Functions.Collided(
+                new(
+                    new(renderZone.Y,renderZone.X),
+                    new(renderZone.Y + renderZone.Height, renderZone.X + renderZone.Width)
+                ), 
+                coordinates
             );
-            return 
-                Functions.doesBelongToRec(rect,coordinates.first)
-                ||
-                Functions.doesBelongToRec(rect,coordinates.second)
-            ;
         }
     }
 }

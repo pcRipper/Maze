@@ -35,8 +35,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(534, 461);
-            MaximumSize = new Size(550, 500);
-            MinimumSize = new Size(550, 500);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "ParentForm";
             Text = "Form1";
             ResumeLayout(false);

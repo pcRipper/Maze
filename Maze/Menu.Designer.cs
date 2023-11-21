@@ -29,64 +29,53 @@
         private void InitializeComponent()
         {
             button1 = new Button();
-            button2 = new Button();
-            button3 = new Button();
             button_exit = new Button();
+            button4 = new Button();
             SuspendLayout();
             // 
             // button1
             // 
-            button1.Location = new Point(213, 118);
+            button1.Location = new Point(65, 36);
             button1.Name = "button1";
-            button1.Size = new Size(75, 23);
+            button1.Size = new Size(100, 35);
             button1.TabIndex = 0;
-            button1.Text = "button1";
+            button1.Text = "Generate";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
-            // button2
-            // 
-            button2.Location = new Point(213, 147);
-            button2.Name = "button2";
-            button2.Size = new Size(75, 23);
-            button2.TabIndex = 1;
-            button2.Text = "button2";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
-            // 
-            // button3
-            // 
-            button3.Location = new Point(213, 176);
-            button3.Name = "button3";
-            button3.Size = new Size(75, 23);
-            button3.TabIndex = 2;
-            button3.Text = "button3";
-            button3.UseVisualStyleBackColor = true;
-            button3.Click += button3_Click;
-            // 
             // button_exit
             // 
-            button_exit.Location = new Point(12, 422);
+            button_exit.Location = new Point(65, 118);
             button_exit.Name = "button_exit";
-            button_exit.Size = new Size(75, 23);
+            button_exit.Size = new Size(100, 35);
             button_exit.TabIndex = 3;
             button_exit.Text = "Exit";
             button_exit.UseVisualStyleBackColor = true;
             button_exit.Click += button_exit_Click;
             // 
+            // button4
+            // 
+            button4.Location = new Point(65, 77);
+            button4.Name = "button4";
+            button4.Size = new Size(100, 35);
+            button4.TabIndex = 4;
+            button4.Text = "Load";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
+            // 
             // Menu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(530, 457);
+            ClientSize = new Size(241, 209);
+            Controls.Add(button4);
             Controls.Add(button_exit);
-            Controls.Add(button3);
-            Controls.Add(button2);
             Controls.Add(button1);
             FormBorderStyle = FormBorderStyle.None;
-            MaximumSize = new Size(530, 457);
-            MinimumSize = new Size(530, 457);
+            MaximumSize = new Size(241, 209);
+            MinimumSize = new Size(241, 209);
             Name = "Menu";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Menu";
             FormClosing += Menu_FormClosing;
             Load += Menu_Load;
@@ -96,8 +85,7 @@
         #endregion
 
         private Button button1;
-        private Button button2;
-        private Button button3;
         private Button button_exit;
+        private Button button4;
     }
 }
